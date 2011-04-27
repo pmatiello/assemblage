@@ -1,0 +1,24 @@
+# Luminescence Makefile
+
+# Configuration
+
+PYTHON="/path/to/python"
+EASYINSTALL="/path/to/easy_install"
+NOSETESTS="/path/to/nosetests"
+
+# Targets
+
+console:
+	export PYTHONPATH=${PYTHONPATH} && ${PYTHON}
+
+test:
+	${NOSETESTS} -i should -i spec --verbose --nocapture
+
+deps:
+	${EASYINSTALL} nose
+	${EASYINSTALL} mocker
+
+clean:
+	find . -name *.pyc -exec rm {} \;
+
+.PHONY: console test clean
