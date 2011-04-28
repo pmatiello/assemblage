@@ -1,4 +1,4 @@
-from assemblage.assemblage import assemblage
+from assemblage import assemblage
 from fixtures import *
 from mocker import Mocker, expect, MATCH
 
