@@ -1,16 +1,5 @@
 from assemblage.assemblage import assemblage
-
-class no_deps(object):
-    pass
-
-class one_dep(object):
-    def __init__(self, dependency):
-        self.dependency = dependency
-
-class two_deps(object):
-    def __init__(self, first_dep, second_dep):
-        self.first_dep = first_dep
-        self.second_dep = second_dep
+from fixtures import *
 
 class assemblage_spec:
     
@@ -19,6 +8,7 @@ class assemblage_spec:
         self.assembler.register(no_deps)
         self.assembler.register(one_dep, requires=[no_deps])
         self.assembler.register(two_deps, requires=[no_deps, one_dep])
+        self.assembler.register(from_factory, requires=[no_deps], factory=factory)
     
     def should_not_build_objects_for_unregistered_types(self):
         try:
@@ -46,3 +36,8 @@ class assemblage_spec:
         instance = self.assembler.new(two_deps)
         assert type(instance.second_dep) == one_dep
         assert type(instance.second_dep.dependency) == no_deps
+    
+    def should_build_objects_from_factories(self):
+        instance = self.assembler.new(from_factory)
+        assert type(instance) == from_factory
+        assert type(instance.dependency) == no_deps
