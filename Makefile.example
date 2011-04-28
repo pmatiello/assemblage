@@ -9,7 +9,7 @@ NOSETESTS="/path/to/nosetests"
 # Targets
 
 console:
-	export PYTHONPATH=${PYTHONPATH} && ${PYTHON}
+	export PYTHONPATH=${PYTHONPATH}:src/ && ${PYTHON}
 
 test:
 	${NOSETESTS} -i should -i spec --verbose --nocapture
