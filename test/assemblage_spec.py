@@ -55,3 +55,15 @@ class assemblage_spec:
             self.assembler.register(int, requires=[no_deps], factory=factory)
             instance = self.assembler.new(int)
         assert instance == 12345
+    
+    def should_add_the_new_instance_to_the_provided_cache(self):
+        cache = {}
+        instance = self.assembler.new(no_deps, cache)
+        assert cache[no_deps] is instance
+    
+    def should_reuse_cached_instances(self):
+        cached_instance = no_deps()
+        cache = {no_deps: cached_instance}
+        instance = self.assembler.new(no_deps, cache)
+        assert instance is cached_instance
+    
