@@ -1,12 +1,12 @@
-from assemblage import assemblage
+from assemblage import assembler
 from fixtures import *
 from mocker import Mocker, expect, MATCH
 
-class assemblage_spec:
+class assembler_spec:
     
     def setUp(self):
         self.mockery = Mocker()
-        self.assembler = assemblage()
+        self.assembler = assembler()
         self.assembler.register(no_deps)
         self.assembler.register(one_dep, requires=[no_deps])
         self.assembler.register(two_deps, requires=[no_deps, one_dep], cacheable=False)

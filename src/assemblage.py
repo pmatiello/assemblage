@@ -1,4 +1,4 @@
-class assemblage(object):
+class assembler(object):
     
     def __init__(self):
         self.types = {}
