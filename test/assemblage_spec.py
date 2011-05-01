@@ -45,12 +45,10 @@ class assembler_spec:
             self.assembler.register(int, requires=[], factory=factory)
             instance = self.assembler.new(int)
         assert instance == 12345
-    
+
     def should_build_objects_with_dependencies_from_factories(self):
         factory = self.mockery.mock()
-        expect(
-            factory(MATCH(lambda arg : type(arg) == no_deps))
-        ).result(12345)
+        expect(factory(arg_of_type(no_deps))).result(12345)
         with self.mockery:
             self.assembler.register(int, requires=[no_deps], factory=factory)
             instance = self.assembler.new(int)
@@ -69,3 +67,21 @@ class assembler_spec:
         second_instance = self.assembler.new(no_deps)
         assert second_instance is first_instance
     
+    def should_spawn_child_assemblers(self):
+        child_assembler = self.assembler.spawn_child()
+        assert child_assembler.parent == self.assembler
+    
+    def should_refer_to_parent_assembler_for_building_rules(self):
+        child_assembler = self.assembler.spawn_child()
+        instance = child_assembler.new(no_deps)
+        assert type(instance) == no_deps
+    
+    def should_use_instances_cached_in_parent_assembler(self): 
+        child_assembler = self.assembler.spawn_child()
+        first_instance = self.assembler.new(no_deps)
+        second_instance = child_assembler.new(no_deps)
+        assert second_instance is first_instance
+    
+
+def arg_of_type(clazz):
+    return MATCH(lambda arg:type(arg) == clazz)
