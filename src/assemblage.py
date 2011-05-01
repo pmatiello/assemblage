@@ -4,10 +4,10 @@ class assemblage(object):
         self.types = {}
         self.cache = {}
     
-    def register(self, type, requires=None, factory=None):
+    def register(self, type, requires=None, factory=None, cacheable=True):
         dependencies = requires or []
         factory = factory or (lambda *deps : self.__build(type, deps))
-        self.types[type] = type_information(factory, dependencies)
+        self.types[type] = type_information(factory, dependencies, cacheable)
     
 
     def new(self, type):
@@ -30,7 +30,8 @@ class assemblage(object):
         return dependencies
   
     def _add_to_cache(self, type, instance):
-        self.cache[type] = instance
+        if (self.types[type].cacheable):
+            self.cache[type] = instance
     
     def __build(self, type, dependencies):
         return type(*dependencies)
@@ -38,6 +39,7 @@ class assemblage(object):
 
 class type_information(object):
     
-    def __init__(self, factory, dependencies):
+    def __init__(self, factory, dependencies, cacheable):
         self.factory = factory
         self.dependencies = dependencies
+        self.cacheable = cacheable

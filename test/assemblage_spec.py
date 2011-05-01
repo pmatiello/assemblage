@@ -9,7 +9,7 @@ class assemblage_spec:
         self.assembler = assemblage()
         self.assembler.register(no_deps)
         self.assembler.register(one_dep, requires=[no_deps])
-        self.assembler.register(two_deps, requires=[no_deps, one_dep])
+        self.assembler.register(two_deps, requires=[no_deps, one_dep], cacheable=False)
     
     def should_not_build_objects_for_unregistered_types(self):
         try:
@@ -60,6 +60,10 @@ class assemblage_spec:
         instance = self.assembler.new(no_deps)
         assert self.assembler.cache[no_deps] is instance
     
+    def should_not_cache_instances_of_classes_registered_as_uncacheable(self):
+        self.assembler.new(two_deps)
+        assert two_deps not in self.assembler.cache
+        
     def should_reuse_cached_instances(self):
         first_instance = self.assembler.new(no_deps)
         second_instance = self.assembler.new(no_deps)
