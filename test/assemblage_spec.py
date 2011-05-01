@@ -56,14 +56,12 @@ class assemblage_spec:
             instance = self.assembler.new(int)
         assert instance == 12345
     
-    def should_add_the_new_instance_to_the_provided_cache(self):
-        cache = {}
-        instance = self.assembler.new(no_deps, cache)
-        assert cache[no_deps] is instance
+    def should_add_the_new_instance_to_the_cache(self):
+        instance = self.assembler.new(no_deps)
+        assert self.assembler.cache[no_deps] is instance
     
     def should_reuse_cached_instances(self):
-        cached_instance = no_deps()
-        cache = {no_deps: cached_instance}
-        instance = self.assembler.new(no_deps, cache)
-        assert instance is cached_instance
+        first_instance = self.assembler.new(no_deps)
+        second_instance = self.assembler.new(no_deps)
+        assert second_instance is first_instance
     

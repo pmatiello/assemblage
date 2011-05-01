@@ -2,6 +2,7 @@ class assemblage(object):
     
     def __init__(self):
         self.types = {}
+        self.cache = {}
     
     def register(self, type, requires=None, factory=None):
         dependencies = requires or []
@@ -9,13 +10,13 @@ class assemblage(object):
         self.types[type] = type_information(factory, dependencies)
     
 
-    def new(self, type, cache=None):
+    def new(self, type):
         if (type not in self.types):
             raise ValueError("Can't build instance for unregistered type %s" % type)
-        if (cache is not None and type in cache.keys()):
-            return cache[type]
+        if (type in self.cache.keys()):
+            return self.cache[type]
         instance = self._build_new(type)
-        self._add_to_cache(cache, type, instance)
+        self._add_to_cache(type, instance)
         return instance
 
     def _build_new(self, type):
@@ -28,9 +29,8 @@ class assemblage(object):
             dependencies.append(self.new(each))
         return dependencies
   
-    def _add_to_cache(self, cache, type, instance):
-        if (cache is not None):
-            cache[type] = instance
+    def _add_to_cache(self, type, instance):
+        self.cache[type] = instance
     
     def __build(self, type, dependencies):
         return type(*dependencies)
