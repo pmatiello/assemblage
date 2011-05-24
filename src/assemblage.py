@@ -16,7 +16,7 @@ class assembler(object):
     def spawn_child(self):
         return assembler(parent=self)
 
-    def new(self, type):
+    def provide(self, type):
         if (not self._can_build_type(type)):
             raise ValueError("Can't build instance for unregistered type %s" % type)
         
@@ -49,7 +49,7 @@ class assembler(object):
     def _build_dependencies(self, type):
         dependencies = []
         for each in self._type_information(type).dependencies:
-            dependencies.append(self.new(each))
+            dependencies.append(self.provide(each))
         return dependencies
   
     def _add_to_cache(self, type, instance):

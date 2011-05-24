@@ -34,7 +34,7 @@ assembler.register(lightbulb)
 And a instance of <tt>lightbulb</tt> is built by the following call:
 
 <pre>
-assembler.new(lightbulb)
+assembler.provide(lightbulb)
 </pre>
 
 Declaring dependencies
@@ -62,7 +62,7 @@ assembler.register(bedrom, requires=[bed, wardrobe, lightbulb])
 Instances of the required classes will be automatically provided when an instance of <tt>bedroom</tt> is requested:
 
 <pre>
-assembler.new(bedroom)
+assembler.provide(bedroom)
 </pre>
 
 Using factories
@@ -99,7 +99,7 @@ Avoiding instance sharing
 
 By default, the assembler will cache every object it produces. Then, when an instance of a type is requested, the assembler will return the previously cached instance of that type, if it exists.
 
-It's possible to have a new instance produced at every <tt>new</tt> call by registering the type as uncacheable:
+It's possible to have a new instance produced at every <tt>provide</tt> call by registering the type as uncacheable:
 
 <pre>
 assembler.register(plastic_bag, cacheable=False)

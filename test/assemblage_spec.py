@@ -13,28 +13,28 @@ class assembler_spec:
     
     def should_not_build_objects_for_unregistered_types(self):
         try:
-            self.assembler.new(str)
+            self.assembler.provide(str)
             assert False
         except ValueError:
             pass
     
     def should_build_objects_without_dependencies(self):
-        instance = self.assembler.new(no_deps)
+        instance = self.assembler.provide(no_deps)
         assert type(instance) == no_deps
     
     def should_build_objects_with_one_dependency(self):
-        instance = self.assembler.new(one_dep)
+        instance = self.assembler.provide(one_dep)
         assert type(instance) == one_dep
         assert type(instance.dependency) == no_deps
     
     def should_build_objects_with_a_few_dependencies(self):
-        instance = self.assembler.new(two_deps)
+        instance = self.assembler.provide(two_deps)
         assert type(instance) == two_deps
         assert type(instance.first_dep) == no_deps
         assert type(instance.second_dep) == one_dep
     
     def should_build_dependencies_correctly(self):
-        instance = self.assembler.new(two_deps)
+        instance = self.assembler.provide(two_deps)
         assert type(instance.second_dep) == one_dep
         assert type(instance.second_dep.dependency) == no_deps
     
@@ -43,7 +43,7 @@ class assembler_spec:
         expect(factory()).result(12345)
         with self.mockery:
             self.assembler.register(int, requires=[], factory=factory)
-            instance = self.assembler.new(int)
+            instance = self.assembler.provide(int)
         assert instance == 12345
 
     def should_build_objects_with_dependencies_from_factories(self):
@@ -51,20 +51,20 @@ class assembler_spec:
         expect(factory(arg_of_type(no_deps))).result(12345)
         with self.mockery:
             self.assembler.register(int, requires=[no_deps], factory=factory)
-            instance = self.assembler.new(int)
+            instance = self.assembler.provide(int)
         assert instance == 12345
     
     def should_add_the_new_instance_to_the_cache(self):
-        instance = self.assembler.new(no_deps)
+        instance = self.assembler.provide(no_deps)
         assert self.assembler.cache[no_deps] is instance
     
     def should_not_cache_instances_of_classes_registered_as_uncacheable(self):
-        self.assembler.new(two_deps)
+        self.assembler.provide(two_deps)
         assert two_deps not in self.assembler.cache
         
     def should_reuse_cached_instances(self):
-        first_instance = self.assembler.new(no_deps)
-        second_instance = self.assembler.new(no_deps)
+        first_instance = self.assembler.provide(no_deps)
+        second_instance = self.assembler.provide(no_deps)
         assert second_instance is first_instance
     
     def should_spawn_child_assemblers(self):
@@ -73,13 +73,13 @@ class assembler_spec:
     
     def should_refer_to_parent_assembler_for_building_rules(self):
         child_assembler = self.assembler.spawn_child()
-        instance = child_assembler.new(no_deps)
+        instance = child_assembler.provide(no_deps)
         assert type(instance) == no_deps
     
     def should_use_instances_cached_in_parent_assembler(self): 
         child_assembler = self.assembler.spawn_child()
-        first_instance = self.assembler.new(no_deps)
-        second_instance = child_assembler.new(no_deps)
+        first_instance = self.assembler.provide(no_deps)
+        second_instance = child_assembler.provide(no_deps)
         assert second_instance is first_instance
     
 
