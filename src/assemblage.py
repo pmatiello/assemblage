@@ -1,11 +1,24 @@
 class assembler(object):
     
     def __init__(self, parent=None):
+        """
+        Assembler constructor.
+        
+        parent: an optional parent assembler.
+        """
         self.types = {}
         self.cache = {}
         self.parent = parent
     
     def register(self, type, requires=None, factory=None, cacheable=True):
+        """
+        Register a new type for construction.
+        
+        type: the type to be registered.
+        requires: an optional list of the types of the dependencies required by instances of the given type.
+        factory: an optional factory method capable of building instances of the given type.
+        cacheable: whether produced instances of the given type should be cached for reuse. 
+        """
         dependencies = requires or []
         factory = factory or (lambda *deps : self.__build(type, deps))
         self.types[type] = type_information(factory, dependencies, cacheable)
@@ -14,9 +27,22 @@ class assembler(object):
         return type(*dependencies)
     
     def spawn_child(self):
+        """
+        Produce an child assembler.
+        
+        Child assemblers have access to all registered types and cached instances present in
+        any of its ancestors.
+        """
         return assembler(parent=self)
 
     def provide(self, type):
+        """
+        Provide a instance of the desired type.
+        
+        If the type is cacheable, it will reuse a previously build instance instead of building a new one.
+        
+        type: the desired type.
+        """
         if (not self._can_build_type(type)):
             raise ValueError("Can't build instance for unregistered type %s" % type)
         
