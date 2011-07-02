@@ -3,6 +3,7 @@
 # Configuration
 
 PYTHON="/path/to/python"
+PYDOC="/path/to/pydoc"
 EASYINSTALL="/path/to/easy_install"
 NOSETESTS="/path/to/nosetests"
 
@@ -11,14 +12,20 @@ NOSETESTS="/path/to/nosetests"
 console:
 	export PYTHONPATH=${PYTHONPATH}:src/ && ${PYTHON}
 
-test:
-	${NOSETESTS} -i should -i spec --verbose --nocapture
+docs:
+	mkdir -p docs
+	${PYDOC} -w src/assemblage.py
+	mv assemblage.html docs
 
 deps:
 	${EASYINSTALL} nose
 	${EASYINSTALL} mocker
 
+test:
+	${NOSETESTS} -i should -i spec --verbose --nocapture
+
 clean:
 	find . -name *.pyc -exec rm {} \;
+	rm -rf docs
 
 .PHONY: console test clean
