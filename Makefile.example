@@ -24,8 +24,15 @@ deps:
 test:
 	${NOSETESTS} -i should -i spec --verbose --nocapture
 
+dist: clean
+	cd src && ./setup.py sdist
+	cp src/dist/* .
+	rm -rf src/dist
+	rm -rf src/*.egg-info
+
 clean:
 	find . -name *.pyc -exec rm {} \;
 	rm -rf docs
+	rm -rf *.tar.gz
 
 .PHONY: console test clean
