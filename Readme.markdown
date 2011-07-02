@@ -4,6 +4,16 @@ Assemblage
 Assemblage is an object assembler for Python programs. It can produce instances of
 arbitrary classes, along which the required dependencies, effortlessly.
 
+Installing
+----------
+
+Assemblage can be installed by <tt>easy_install</tt>:
+
+<pre>
+# easy_install assemblage
+</pre>
+
+
 Producing an assembler
 ----------------------
 
