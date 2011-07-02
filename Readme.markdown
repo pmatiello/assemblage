@@ -13,7 +13,6 @@ Assemblage can be installed by <tt>easy_install</tt>:
 # easy_install assemblage
 </pre>
 
-
 Producing an assembler
 ----------------------
 
