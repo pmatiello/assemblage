@@ -15,14 +15,24 @@ appversion = "0.1"
 setup(
     name = appname,
     version = appversion,
+    url='https://github.com/pmatiello/assemblage',
+
     author = "Pedro Matiello",
-    py_modules = ["assemblage"],
-    author_email = "pmatiello@gmail.com",
+    author_email='pmatiello@gmail.com',
+    
     description = "A small Python framework for building objects in dependency-injection style.",
-    license = "MIT",
-    keywords = "",
-    url = "https://github.com/pmatiello/luminescence",
     long_description = "A small Python framework for building objects in dependency-injection style.",
+    keywords = "",
+    classifiers=[
+        "Programming Language :: Python",
+        "Topic :: Software Development :: Libraries",
+        "Intended Audience :: Developers",
+        "Development Status :: 4 - Beta",
+        "License :: OSI Approved :: MIT License",
+    ],
+    license = "MIT",
+    
+    py_modules = ["assemblage"],
     include_package_data = True,
     zip_safe = True,
 )
