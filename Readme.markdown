@@ -65,7 +65,7 @@ class car(object):
 Instances of <tt>bedroom</tt> require instances of the types <tt>bed</tt>, <tt>wardrobe</tt> and <tt>lightbulb</tt>. These requirements, therefore, must be expressed when the <tt>bedroom</tt> type is registered in the assembler:
 
 <pre>
-assembler.register(bedrom, requires=[bed, wardrobe, lightbulb])
+assembler.register(bedroom, requires=[bed, wardrobe, lightbulb])
 </pre>
 
 Instances of the required classes will be automatically provided when an instance of <tt>bedroom</tt> is requested:
