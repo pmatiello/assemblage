@@ -82,6 +82,10 @@ class assembler_spec:
         second_instance = child_assembler.provide(no_deps)
         assert second_instance is first_instance
     
+    def should_be_able_to_provide_itself_to_created_objects(self):
+        asm = assembler()
+        asm.register(one_dep, requires=[assembler])
+        instance = asm.provide(one_dep)
 
 def arg_of_type(clazz):
     return MATCH(lambda arg:type(arg) == clazz)

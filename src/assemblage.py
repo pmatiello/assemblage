@@ -9,6 +9,7 @@ class assembler(object):
         self.types = {}
         self.cache = {}
         self.parent = parent
+        self.register(assembler, factory=(lambda *deps : self))
     
     def register(self, type, requires=None, factory=None, cacheable=True):
         """
