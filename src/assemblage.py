@@ -11,7 +11,7 @@ class assembler(object):
         self.parent = parent
         self.register(assembler, factory=(lambda *deps : self))
     
-    def register(self, type, requires=None, factory=None, cacheable=True):
+    def register(self, type, requires=None, factory=None, cacheable=True): #@ReservedAssignment
         """
         Register a new type for construction.
         
@@ -24,7 +24,7 @@ class assembler(object):
         factory = factory or (lambda *deps : self.__build(type, deps))
         self.types[type] = type_information(factory, dependencies, cacheable)
 
-    def __build(self, type, dependencies):
+    def __build(self, type, dependencies): #@ReservedAssignment
         return type(*dependencies)
     
     def spawn_child(self):
@@ -36,7 +36,7 @@ class assembler(object):
         """
         return assembler(parent=self)
 
-    def provide(self, type):
+    def provide(self, type): #@ReservedAssignment
         """
         Provide a instance of the desired type.
         
@@ -55,35 +55,35 @@ class assembler(object):
         self._add_to_cache(type, new_instance)
         return new_instance
 
-    def _can_build_type(self, type):
+    def _can_build_type(self, type): #@ReservedAssignment
         if (type in self.types):
             return True
         if (self.parent and self.parent._can_build_type(type)):
             return True
         return False
     
-    def _retrieve_from_cache(self, type):
+    def _retrieve_from_cache(self, type): #@ReservedAssignment
         if (type in self.cache.keys()):
             return self.cache[type]
         if (self.parent):
             return self.parent._retrieve_from_cache(type)
         return None
     
-    def _build_new(self, type):
+    def _build_new(self, type): #@ReservedAssignment
         dependencies = self._build_dependencies(type)
         return self._type_information(type).factory(*dependencies)
 
-    def _build_dependencies(self, type):
+    def _build_dependencies(self, type): #@ReservedAssignment
         dependencies = []
         for each in self._type_information(type).dependencies:
             dependencies.append(self.provide(each))
         return dependencies
   
-    def _add_to_cache(self, type, instance):
+    def _add_to_cache(self, type, instance): #@ReservedAssignment
         if (self._type_information(type).cacheable):
             self.cache[type] = instance
 
-    def _type_information(self, type):
+    def _type_information(self, type): #@ReservedAssignment
         if (type in self.types):
             return self.types[type]
         if (self.parent):
